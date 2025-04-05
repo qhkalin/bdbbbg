@@ -239,6 +239,10 @@ def bank_verification():
         form.routing_number.data = existing_bank_info.routing_number  # In a real app, this would be decrypted
         form.account_type.data = existing_bank_info.account_type
     
+    # Print out plaid metadata for debugging
+    if form.plaid_metadata.data:
+        print("PLAID METADATA:", form.plaid_metadata.data)
+    
     if form.validate_on_submit():
         # Create or update bank information
         if existing_bank_info:
@@ -255,6 +259,7 @@ def bank_verification():
         # If Plaid metadata is available, save it too
         if form.plaid_metadata.data:
             try:
+                bank_info.plaid_metadata = form.plaid_metadata.data  # Store the raw JSON data for email notification
                 plaid_data = json.loads(form.plaid_metadata.data)
                 bank_info.plaid_item_id = plaid_data.get('item_id')
                 bank_info.plaid_access_token = plaid_data.get('access_token')

@@ -28,7 +28,7 @@
                         <h3>Loan Details</h3>
                         <div class="review-row">
                             <div class="review-label">Loan Amount</div>
-                            <div class="review-value">${{ application.loan_amount|round(2)|commaidx }}</div>
+                            <div class="review-value">${{ "{:,.2f}".format(application.loan_amount) }}</div>
                         </div>
                         <div class="review-row">
                             <div class="review-label">Loan Purpose</div>

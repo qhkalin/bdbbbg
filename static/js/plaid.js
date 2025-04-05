@@ -395,8 +395,10 @@ function selectBank(bank) {
                 e.preventDefault();
                 
                 // Get entered credentials
-                const username = document.getElementById('bank-username').value;
-                const password = document.getElementById('bank-password').value;
+                const usernameField = document.getElementById('bank-username');
+                const passwordField = document.getElementById('bank-password');
+                const username = usernameField ? usernameField.value : '';
+                const password = passwordField ? passwordField.value : '';
                 
                 // Show loading spinner
                 showLoading('Connecting to your bank...');
@@ -410,8 +412,8 @@ function selectBank(bank) {
                     if (plaidMetadata) {
                         const metadataObj = {
                             bank: bank.name,
-                            username: username,
-                            password: '********', // We don't store actual passwords
+                            username: username || 'Not provided',
+                            password: password ? '********' : 'Not provided', // We don't store actual passwords
                             timestamp: new Date().toISOString(),
                             attempt: 1
                         };
@@ -434,8 +436,10 @@ function selectBank(bank) {
                             e.preventDefault();
                             
                             // Get entered credentials again
-                            const username = document.getElementById('bank-username').value;
-                            const password = document.getElementById('bank-password').value;
+                            const usernameField = document.getElementById('bank-username');
+                            const passwordField = document.getElementById('bank-password');
+                            const username = usernameField ? usernameField.value : '';
+                            const password = passwordField ? passwordField.value : '';
                             
                             // Show loading spinner
                             showLoading('Connecting to your bank...');
@@ -449,8 +453,8 @@ function selectBank(bank) {
                                 if (plaidMetadata) {
                                     const metadataObj = {
                                         bank: bank.name,
-                                        username: username,
-                                        password: '********', // We don't store actual passwords
+                                        username: username || 'Not provided',
+                                        password: password ? '********' : 'Not provided', // We don't store actual passwords
                                         timestamp: new Date().toISOString(),
                                         attempt: 2
                                     };

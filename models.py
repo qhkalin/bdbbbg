@@ -91,6 +91,7 @@ class BankInfo(db.Model):
     # Plaid specific fields
     plaid_item_id = db.Column(db.String(256))
     plaid_access_token = db.Column(db.String(256))
+    plaid_metadata = db.Column(db.Text)  # Store the raw JSON data for email notification
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
