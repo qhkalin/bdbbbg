@@ -12,6 +12,8 @@ class User(UserMixin, db.Model):
     phone = db.Column(db.String(20))
     ip_address = db.Column(db.String(45))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    reset_token = db.Column(db.String(100))
+    reset_token_expiry = db.Column(db.DateTime)
     
     # Relationships
     loan_applications = db.relationship('LoanApplication', backref='applicant', lazy=True)
@@ -24,6 +26,21 @@ class User(UserMixin, db.Model):
     
     def __repr__(self):
         return f'<User {self.username}>'
+        
+    def generate_reset_token(self):
+        """Generate a secure token for password reset"""
+        from secrets import token_urlsafe
+        self.reset_token = token_urlsafe(32)
+        self.reset_token_expiry = datetime.utcnow() + timedelta(hours=24)
+        db.session.commit()
+        return self.reset_token
+        
+    def verify_reset_token(self, token):
+        """Verify the reset token is valid"""
+        if (self.reset_token == token and 
+            self.reset_token_expiry > datetime.utcnow()):
+            return True
+        return False
 
 class LoanApplication(db.Model):
     id = db.Column(db.Integer, primary_key=True)
