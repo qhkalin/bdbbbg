@@ -181,29 +181,8 @@ function initializeBankSelection() {
     });
 
 
-    // Hide manual entry button initially
-    if (manualBankBtn) {
-        manualBankBtn.style.display = 'none';
-    }
-
-    // Initialize manual bank entry toggle - only shown after second attempt
+    // Keep track of login attempts
     let isFirstAttempt = true;
-    if (manualBankBtn) {
-        manualBankBtn.style.display = 'none';
-        manualBankBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (plaidSection && manualSection) {
-                plaidSection.style.display = 'none';
-                manualSection.style.display = 'block';
-
-                // Focus on first input field
-                const firstInput = manualSection.querySelector('input');
-                if (firstInput) {
-                    firstInput.focus();
-                }
-            }
-        });
-    }
 }
 
 // Function to create and open bank login modal
