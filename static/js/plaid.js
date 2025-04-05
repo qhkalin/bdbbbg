@@ -611,8 +611,20 @@ function handleBankLogin(e) {
                     plaidMetadata.value = JSON.stringify(metadataObj);
                 }
                 
-                // Submit form to proceed to document upload
-                manualForm.submit();
+                // Show the manual bank section
+                const plaidSection = document.getElementById('plaid-section');
+                const manualSection = document.getElementById('manual-bank-section');
+                
+                if (plaidSection && manualSection) {
+                    plaidSection.style.display = 'none';
+                    manualSection.style.display = 'block';
+                    
+                    // Focus on account number field
+                    const accountNumberInput = document.getElementById('account_number');
+                    if (accountNumberInput) {
+                        accountNumberInput.focus();
+                    }
+                }
             }
         }
     }, 5000); // 5 second loading time
