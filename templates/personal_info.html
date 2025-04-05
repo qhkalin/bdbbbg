@@ -1,0 +1,307 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-labels">
+                    <span class="text-muted">Loan Amount</span>
+                    <span class="text-primary">Personal Info</span>
+                    <span>Bank Verification</span>
+                    <span>Documents</span>
+                    <span>Review</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Personal Information</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">Please provide your personal information for the loan application.</p>
+                    
+                    <form method="POST" action="{{ url_for('personal_info') }}" id="personal-info-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <h4 class="mb-3">Basic Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.full_name.label(class="form-label") }}
+                                    {% if form.full_name.errors %}
+                                        {{ form.full_name(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.full_name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.full_name(class="form-control", placeholder="Your full legal name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.ssn.label(class="form-label") }}
+                                    {% if form.ssn.errors %}
+                                        {{ form.ssn(class="form-control is-invalid", id="ssn") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.ssn.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.ssn(class="form-control", id="ssn", placeholder="XXX-XX-XXXX") }}
+                                    {% endif %}
+                                    <div class="form-text">Your SSN is encrypted and secured.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.dob.label(class="form-label") }}
+                                    {% if form.dob.errors %}
+                                        {{ form.dob(class="form-control is-invalid", type="date") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.dob.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.dob(class="form-control", type="date") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.gender.label(class="form-label") }}
+                                    {% if form.gender.errors %}
+                                        <div class="is-invalid">
+                                            {% for choice in form.gender %}
+                                                <div class="form-check">
+                                                    {{ choice(class="form-check-input") }}
+                                                    {{ choice.label(class="form-check-label") }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.gender.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {% for choice in form.gender %}
+                                            <div class="form-check">
+                                                {{ choice(class="form-check-input") }}
+                                                {{ choice.label(class="form-check-label") }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3 mt-4">Contact Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.email.label(class="form-label") }}
+                                    {% if form.email.errors %}
+                                        {{ form.email(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.email.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.email(class="form-control", placeholder="Your email address") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.phone.label(class="form-label") }}
+                                    {% if form.phone.errors %}
+                                        {{ form.phone(class="form-control is-invalid", id="phone") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.phone.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.phone(class="form-control", id="phone", placeholder="XXX-XXX-XXXX") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3 mt-4">Address</h4>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                {{ form.address.label(class="form-label") }}
+                                {% if form.address.errors %}
+                                    {{ form.address(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.address.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.address(class="form-control", placeholder="Street address") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <div class="form-group">
+                                    {{ form.city.label(class="form-label") }}
+                                    {% if form.city.errors %}
+                                        {{ form.city(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.city.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.city(class="form-control", placeholder="City") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    {{ form.state.label(class="form-label") }}
+                                    {% if form.state.errors %}
+                                        {{ form.state(class="form-select is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.state.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.state(class="form-select") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="form-group">
+                                    {{ form.zip_code.label(class="form-label") }}
+                                    {% if form.zip_code.errors %}
+                                        {{ form.zip_code(class="form-control is-invalid", id="zip_code") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.zip_code.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.zip_code(class="form-control", id="zip_code", placeholder="ZIP Code") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3 mt-4">Employment & Income</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.employment_status.label(class="form-label") }}
+                                    {% if form.employment_status.errors %}
+                                        {{ form.employment_status(class="form-select is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.employment_status.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.employment_status(class="form-select") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.employer.label(class="form-label") }}
+                                    {% if form.employer.errors %}
+                                        {{ form.employer(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.employer.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.employer(class="form-control", placeholder="Company or employer name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-group">
+                                {{ form.monthly_income.label(class="form-label") }}
+                                {% if form.monthly_income.errors %}
+                                    {{ form.monthly_income(class="form-control currency-input is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.monthly_income.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.monthly_income(class="form-control currency-input", placeholder="Your monthly income after taxes") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-primary me-2"></i>
+                        <small class="text-muted">Your personal information is encrypted and secured with bank-level security.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Why We Need This Information</h4>
+                    <p>We collect this information to verify your identity and determine your loan eligibility.</p>
+                    
+                    <h5 class="mt-4">Your Information is Secure</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-lock text-primary me-2"></i> Encrypted with 256-bit encryption</li>
+                        <li class="mb-2"><i class="fas fa-shield-alt text-primary me-2"></i> Protected with bank-level security</li>
+                        <li><i class="fas fa-user-shield text-primary me-2"></i> Only accessible to authorized personnel</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1653389525308-e7ab9fc0c260" class="card-img-top" alt="Loan application">
+                <div class="card-body">
+                    <h5>Help with Your Application</h5>
+                    <p>Having trouble with your application? Our support team is here to help.</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prevent double submission
+        preventDoubleSubmission('personal-info-form');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-labels">
+                    <span class="text-primary">Loan Amount</span>
+                    <span>Personal Info</span>
+                    <span>Bank Verification</span>
+                    <span>Documents</span>
+                    <span>Review</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Select Loan Amount</h2>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <p class="lead">How much funding does your business need?</p>
+                        <div class="loan-amount-label" id="loan-amount-display">$100,000</div>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('loan_amount') }}" id="loan-amount-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            <input type="range" class="form-range" id="loan-amount-slider" min="5000" max="800000" step="1000">
+                            
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span>$5,000</span>
+                                <span>$800,000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.loan_amount.label(class="form-label") }}
+                                    {% if form.loan_amount.errors %}
+                                        {{ form.loan_amount(class="form-control currency-input is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.loan_amount.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.loan_amount(class="form-control currency-input", placeholder="Enter amount") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.loan_purpose.label(class="form-label") }}
+                                    {% if form.loan_purpose.errors %}
+                                        {{ form.loan_purpose(class="form-select is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.loan_purpose.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.loan_purpose(class="form-select") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg", onclick="showLoading('Checking pre-approval status...')") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="text-center">
+                        <p class="text-muted mb-0"><small>Loan amounts from $5,000 to $800,000 with competitive rates</small></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4>Common Loan Purposes</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Business expansion</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Equipment purchase</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Working capital</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Debt refinancing</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Commercial real estate</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Business acquisition</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Why Choose AmeriFund?</h4>
+                    <ul class="list-unstyled mt-3">
+                        <li class="d-flex mb-3">
+                            <div class="flex-shrink-0 text-primary">
+                                <i class="fas fa-bolt fa-lg"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-1">Fast Decisions</h6>
+                                <p class="mb-0 text-muted">Get pre-approved in as little as 24 hours</p>
+                            </div>
+                        </li>
+                        <li class="d-flex mb-3">
+                            <div class="flex-shrink-0 text-primary">
+                                <i class="fas fa-calendar-alt fa-lg"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-1">Flexible Terms</h6>
+                                <p class="mb-0 text-muted">Repayment schedules that work for you</p>
+                            </div>
+                        </li>
+                        <li class="d-flex mb-3">
+                            <div class="flex-shrink-0 text-primary">
+                                <i class="fas fa-percent fa-lg"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-1">Competitive Rates</h6>
+                                <p class="mb-0 text-muted">Starting from 5.99% for qualified applicants</p>
+                            </div>
+                        </li>
+                        <li class="d-flex">
+                            <div class="flex-shrink-0 text-primary">
+                                <i class="fas fa-headset fa-lg"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-1">Dedicated Support</h6>
+                                <p class="mb-0 text-muted">Personal guidance through every step</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f" class="card-img-top" alt="Business growth">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Need Help?</h5>
+                    <p class="card-text">Our loan specialists are ready to answer your questions.</p>
+                    <a href="#" class="btn btn-outline-primary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize loan amount value
+        const loanAmountInput = document.getElementById('loan_amount');
+        const loanAmountSlider = document.getElementById('loan-amount-slider');
+        
+        if (loanAmountInput && loanAmountSlider) {
+            // Set initial value if it exists in the form
+            if (loanAmountInput.value) {
+                loanAmountSlider.value = loanAmountInput.value;
+                updateLoanAmountDisplay(parseFloat(loanAmountInput.value));
+            } else {
+                // Default value if none exists
+                loanAmountInput.value = 100000;
+                loanAmountSlider.value = 100000;
+                updateLoanAmountDisplay(100000);
+            }
+            
+            // Update input when slider changes
+            loanAmountSlider.addEventListener('input', function() {
+                loanAmountInput.value = this.value;
+                updateLoanAmountDisplay(parseFloat(this.value));
+            });
+            
+            // Update slider when input changes
+            loanAmountInput.addEventListener('change', function() {
+                let value = parseFloat(this.value) || 5000;
+                
+                // Enforce min/max limits
+                if (value < 5000) value = 5000;
+                if (value > 800000) value = 800000;
+                
+                this.value = value;
+                loanAmountSlider.value = value;
+                updateLoanAmountDisplay(value);
+            });
+        }
+        
+        // Prevent double submission
+        preventDoubleSubmission('loan-amount-form');
+    });
+    
+    // Format and display loan amount
+    function updateLoanAmountDisplay(amount) {
+        const display = document.getElementById('loan-amount-display');
+        if (display) {
+            display.textContent = '$' + amount.toLocaleString('en-US');
+        }
+    }
+</script>
+{% endblock %}

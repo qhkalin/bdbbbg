@@ -1,0 +1,239 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-labels">
+                    <span class="text-muted">Loan Amount</span>
+                    <span class="text-muted">Personal Info</span>
+                    <span class="text-muted">Bank Verification</span>
+                    <span class="text-primary">Documents</span>
+                    <span>Review</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Upload Required Documents</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">Please upload the following documents to complete your application.</p>
+                    
+                    <form method="POST" action="{{ url_for('upload_documents') }}" enctype="multipart/form-data" id="upload-documents-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Government ID (Front)</label>
+                                <div class="file-upload-container{% if 'id_front' in existing_doc_types %} has-file{% endif %}">
+                                    <div class="file-upload-icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <p>Click to upload or drag and drop</p>
+                                    <p class="text-muted small">Accepts PDF, JPG, PNG (Max 16MB)</p>
+                                    {{ form.id_front(class="form-control visually-hidden", accept=".pdf,.jpg,.jpeg,.png") }}
+                                    
+                                    {% for doc in existing_documents %}
+                                        {% if doc.document_type == 'id_front' %}
+                                            <p class="file-name">{{ doc.original_name }} ({{ (doc.file_size/1024)|round(1) }} KB)</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if form.id_front.errors %}
+                                        <div class="text-danger mt-2">
+                                            {% for error in form.id_front.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Government ID (Back)</label>
+                                <div class="file-upload-container{% if 'id_back' in existing_doc_types %} has-file{% endif %}">
+                                    <div class="file-upload-icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <p>Click to upload or drag and drop</p>
+                                    <p class="text-muted small">Accepts PDF, JPG, PNG (Max 16MB)</p>
+                                    {{ form.id_back(class="form-control visually-hidden", accept=".pdf,.jpg,.jpeg,.png") }}
+                                    
+                                    {% for doc in existing_documents %}
+                                        {% if doc.document_type == 'id_back' %}
+                                            <p class="file-name">{{ doc.original_name }} ({{ (doc.file_size/1024)|round(1) }} KB)</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if form.id_back.errors %}
+                                        <div class="text-danger mt-2">
+                                            {% for error in form.id_back.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Recent Paystub or Employment Letter</label>
+                                <div class="file-upload-container{% if 'paystub' in existing_doc_types %} has-file{% endif %}">
+                                    <div class="file-upload-icon">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                    </div>
+                                    <p>Click to upload or drag and drop</p>
+                                    <p class="text-muted small">Accepts PDF, JPG, PNG (Max 16MB)</p>
+                                    {{ form.paystub(class="form-control visually-hidden", accept=".pdf,.jpg,.jpeg,.png") }}
+                                    
+                                    {% for doc in existing_documents %}
+                                        {% if doc.document_type == 'paystub' %}
+                                            <p class="file-name">{{ doc.original_name }} ({{ (doc.file_size/1024)|round(1) }} KB)</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if form.paystub.errors %}
+                                        <div class="text-danger mt-2">
+                                            {% for error in form.paystub.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Utility Bill (Optional)</label>
+                                <div class="file-upload-container{% if 'utility_bill' in existing_doc_types %} has-file{% endif %}">
+                                    <div class="file-upload-icon">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </div>
+                                    <p>Click to upload or drag and drop</p>
+                                    <p class="text-muted small">Accepts PDF, JPG, PNG (Max 16MB)</p>
+                                    {{ form.utility_bill(class="form-control visually-hidden", accept=".pdf,.jpg,.jpeg,.png") }}
+                                    
+                                    {% for doc in existing_documents %}
+                                        {% if doc.document_type == 'utility_bill' %}
+                                            <p class="file-name">{{ doc.original_name }} ({{ (doc.file_size/1024)|round(1) }} KB)</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if form.utility_bill.errors %}
+                                        <div class="text-danger mt-2">
+                                            {% for error in form.utility_bill.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-primary me-2"></i>
+                        <small class="text-muted">Your documents are securely stored and accessible only to authorized personnel.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Document Guidelines</h4>
+                    
+                    <h5 class="mt-4">Government ID</h5>
+                    <ul>
+                        <li>Driver's license, passport, or state ID</li>
+                        <li>Must be current and not expired</li>
+                        <li>Both front and back are required</li>
+                        <li>Must be clearly visible and legible</li>
+                    </ul>
+                    
+                    <h5 class="mt-4">Paystub or Employment Letter</h5>
+                    <ul>
+                        <li>Must be issued within the last 60 days</li>
+                        <li>Should show your name, employer, and income</li>
+                        <li>Employment letter must be on company letterhead</li>
+                    </ul>
+                    
+                    <h5 class="mt-4">Utility Bill (Optional)</h5>
+                    <ul>
+                        <li>Must be issued within the last 90 days</li>
+                        <li>Should show your name and current address</li>
+                        <li>Can be electric, water, gas, internet, etc.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1653389527532-884074ac1c65" class="card-img-top" alt="Document upload">
+                <div class="card-body">
+                    <h5>Having Trouble?</h5>
+                    <p>If you're experiencing issues uploading documents, our support team can help.</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make the whole container clickable for file inputs
+        const fileContainers = document.querySelectorAll('.file-upload-container');
+        
+        fileContainers.forEach(container => {
+            const fileInput = container.querySelector('input[type="file"]');
+            
+            if (fileInput) {
+                container.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on the actual input or file name
+                    if (e.target !== fileInput && !e.target.classList.contains('file-name')) {
+                        fileInput.click();
+                    }
+                });
+                
+                // Prevent default on drag over
+                container.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    container.classList.add('border-primary');
+                });
+                
+                // Remove highlight on drag leave
+                container.addEventListener('dragleave', function() {
+                    container.classList.remove('border-primary');
+                });
+                
+                // Handle drop
+                container.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    container.classList.remove('border-primary');
+                    
+                    if (e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        
+                        // Trigger change event
+                        const event = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(event);
+                    }
+                });
+            }
+        });
+        
+        // Prevent double submission
+        preventDoubleSubmission('upload-documents-form');
+    });
+</script>
+{% endblock %}

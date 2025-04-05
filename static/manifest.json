@@ -1,0 +1,28 @@
+{
+  "name": "AmeriFund Loan Application",
+  "short_name": "AmeriFund",
+  "description": "Secure financing solutions for your business needs",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#003366",
+  "theme_color": "#003366",
+  "icons": [
+    {
+      "src": "/static/images/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/images/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en-US",
+  "prefer_related_applications": false
+}

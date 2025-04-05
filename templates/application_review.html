@@ -1,0 +1,252 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-labels">
+                    <span class="text-muted">Loan Amount</span>
+                    <span class="text-muted">Personal Info</span>
+                    <span class="text-muted">Bank Verification</span>
+                    <span class="text-muted">Documents</span>
+                    <span class="text-primary">Review</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Application Review</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">Please review your loan application before submitting.</p>
+                    
+                    <div class="review-section">
+                        <h3>Loan Details</h3>
+                        <div class="review-row">
+                            <div class="review-label">Loan Amount</div>
+                            <div class="review-value">${{ application.loan_amount|round(2)|commaidx }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Loan Purpose</div>
+                            <div class="review-value">{{ application.loan_purpose|replace('_', ' ')|title }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h3>Personal Information</h3>
+                        <div class="review-row">
+                            <div class="review-label">Full Name</div>
+                            <div class="review-value">{{ application.full_name }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">SSN</div>
+                            <div class="review-value">xxx-xx-{{ application.ssn[-4:] }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Date of Birth</div>
+                            <div class="review-value">{{ application.dob.strftime('%B %d, %Y') }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Email</div>
+                            <div class="review-value">{{ application.email }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Phone</div>
+                            <div class="review-value">{{ application.phone }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Gender</div>
+                            <div class="review-value">{{ application.gender|replace('_', ' ')|title }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h3>Address</h3>
+                        <div class="review-row">
+                            <div class="review-label">Street Address</div>
+                            <div class="review-value">{{ application.address }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">City, State ZIP</div>
+                            <div class="review-value">{{ application.city }}, {{ application.state }} {{ application.zip_code }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h3>Employment & Income</h3>
+                        <div class="review-row">
+                            <div class="review-label">Employment Status</div>
+                            <div class="review-value">{{ application.employment_status|replace('_', ' ')|title }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Employer</div>
+                            <div class="review-value">{{ application.employer or 'N/A' }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Monthly Income</div>
+                            <div class="review-value">${{ application.monthly_income|round(2)|commaidx }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h3>Bank Information</h3>
+                        <div class="review-row">
+                            <div class="review-label">Bank Name</div>
+                            <div class="review-value">{{ bank_info.bank_name }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Account Name</div>
+                            <div class="review-value">{{ bank_info.account_name }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Account Type</div>
+                            <div class="review-value">{{ bank_info.account_type|replace('_', ' ')|title }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Account Number</div>
+                            <div class="review-value">xxxx-xxxx-xxxx-{{ bank_info.account_number[-4:] }}</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Routing Number</div>
+                            <div class="review-value">{{ bank_info.routing_number }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h3>Uploaded Documents</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>File Name</th>
+                                        <th>Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in documents %}
+                                    <tr>
+                                        <td>{{ doc.document_type|replace('_', ' ')|title }}</td>
+                                        <td>{{ doc.original_name }}</td>
+                                        <td>{{ (doc.file_size/1024)|round(1) }} KB</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <form method="POST" action="{{ url_for('application_review') }}" id="application-review-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-group mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Terms and Conditions</h5>
+                                    <div class="mb-3" style="max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; padding: 15px; border-radius: 4px;">
+                                        <p><strong>AmeriFund Loan Agreement</strong></p>
+                                        <p>By submitting this application, you agree to the following terms:</p>
+                                        <ol>
+                                            <li>You certify that all information provided is true and accurate.</li>
+                                            <li>You authorize AmeriFund to verify your information, including performing credit checks.</li>
+                                            <li>You understand that submitting an application does not guarantee approval.</li>
+                                            <li>You understand that approved loans will be subject to interest rates based on your creditworthiness.</li>
+                                            <li>You agree to repay the loan according to the terms of the loan agreement if approved.</li>
+                                            <li>You acknowledge that false information may result in rejection of your application or legal action.</li>
+                                        </ol>
+                                        <p>For complete terms and conditions, please refer to our website or contact customer service.</p>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        {% if form.agree_terms.errors %}
+                                            <div class="is-invalid">
+                                                {% for choice in form.agree_terms %}
+                                                    <div class="form-check">
+                                                        {{ choice(class="form-check-input") }}
+                                                        {{ choice.label(class="form-check-label") }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="invalid-feedback d-block">
+                                                {% for error in form.agree_terms.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {% for choice in form.agree_terms %}
+                                                <div class="form-check">
+                                                    {{ choice(class="form-check-input") }}
+                                                    {{ choice.label(class="form-check-label") }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg", onclick="showLoading('Submitting your application...')") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        <small class="text-muted">You'll receive a confirmation email once your application is submitted.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>What Happens Next</h4>
+                    <ol class="mt-3">
+                        <li class="mb-3">
+                            <strong>Application Review</strong>
+                            <p class="text-muted small">Our team will review your application and documents within 24 hours.</p>
+                        </li>
+                        <li class="mb-3">
+                            <strong>Credit Decision</strong>
+                            <p class="text-muted small">We'll assess your creditworthiness and determine loan terms.</p>
+                        </li>
+                        <li class="mb-3">
+                            <strong>Loan Approval</strong>
+                            <p class="text-muted small">If approved, you'll receive a formal loan offer with terms.</p>
+                        </li>
+                        <li>
+                            <strong>Funding</strong>
+                            <p class="text-muted small">Once you accept the terms, funds will be disbursed to your account.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1653389522479-ccaa5fb2ab2b" class="card-img-top" alt="Loan approval">
+                <div class="card-body">
+                    <h5>Questions About Your Application?</h5>
+                    <p>Our loan specialists are available to answer any questions about your application.</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prevent double submission
+        preventDoubleSubmission('application-review-form');
+    });
+</script>
+{% endblock %}
