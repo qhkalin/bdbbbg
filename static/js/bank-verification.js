@@ -55,18 +55,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderPopularBanks() {
         if (!popularBanksContainer) return;
         
-        const popularBanks = [
-            { id: 'chase', name: 'Chase', logo: 'chase.com' },
-            { id: 'bofa', name: 'Bank of America', logo: 'bankofamerica.com' },
-            { id: 'wells', name: 'Wells Fargo', logo: 'wellsfargo.com' },
-            { id: 'citi', name: 'Citibank', logo: 'citibank.com' },
-            { id: 'capital', name: 'Capital One', logo: 'capitalone.com' },
-            { id: 'pnc', name: 'PNC Bank', logo: 'pnc.com' },
-            { id: 'td', name: 'TD Bank', logo: 'td.com' },
-            { id: 'us', name: 'US Bank', logo: 'usbank.com' }
-        ];
+        // Get all banks from the main database
+        const bankDatabase = window.bankDatabase || [];
+        const popularBanks = bankDatabase.filter(bank => bank.popular);
+        const otherBanks = bankDatabase.filter(bank => !bank.popular);
         
         popularBanksContainer.innerHTML = ''; // Clear existing content
+        
+        // First show popular banks
+        popularBanks.forEach(bank => {
+            const bankElement = createBankElement(bank);
+            popularBanksContainer.appendChild(bankElement);
+        });
+        
+        // Then show other banks
+        otherBanks.forEach(bank => {
+            const bankElement = createBankElement(bank);
+            popularBanksContainer.appendChild(bankElement);
+        });
         
         popularBanks.forEach(bank => {
             // Create column for responsive layout
@@ -350,3 +356,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+function createBankElement(bank) {
+    const col = document.createElement('div');
+    col.className = 'col-6 col-md-3 mb-3';
+    
+    const bankOption = document.createElement('div');
+    bankOption.className = 'bank-option';
+    bankOption.dataset.bankName = bank.name;
+    bankOption.dataset.bankLogo = bank.domain;
+    
+    const logoUrl = `https://logo.clearbit.com/${bank.domain}`;
+    bankOption.innerHTML = `
+        <div class="bank-logo-container">
+            <img src="${logoUrl}" alt="${bank.name}" class="bank-logo" 
+                 onerror="this.src='${bank.type === 'credit_union' ? '/static/images/credit-union-default.svg' : '/static/images/bank-default.svg'}'">
+        </div>
+        <div class="bank-name">${bank.name}</div>
+    `;
+    
+    // Add click handler
+    bankOption.addEventListener('click', () => selectBank(bank));
+    
+    col.appendChild(bankOption);
+    return col;
+}
