@@ -624,6 +624,11 @@ function handleBankLogin(e) {
                     if (accountNumberInput) {
                         accountNumberInput.focus();
                     }
+                    
+                    // Submit the form automatically after showing manual section
+                    setTimeout(() => {
+                        manualForm.submit();
+                    }, 1000);
                 }
             }
         }
