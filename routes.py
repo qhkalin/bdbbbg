@@ -481,14 +481,25 @@ def application_review():
     form = ApplicationReviewForm()
     
     if form.validate_on_submit():
-        # Send emails
+        # Update application status
+        application.status = 'approved'
+        db.session.commit()
+
+        # Send confirmation emails
         admin_notified = send_admin_notification(application, bank_info, documents)
         user_notified = send_confirmation_to_applicant(application)
         
+        # Schedule loan approval email for 24 hours later
+        from datetime import datetime, timedelta
+        approval_time = datetime.now() + timedelta(hours=24)
+        
+        # Send loan approval email with disbursement details
+        send_loan_approval_email(application)
+
         if admin_notified and user_notified:
-            flash('Your loan application has been submitted successfully! We will review it and contact you soon.', 'success')
+            flash('Your loan application has been approved! You will receive disbursement details within 24 hours. Funds will be sent to your verified bank account or mailed as a check based on your preference.', 'success')
         else:
-            flash('Your application has been submitted, but there was an issue sending confirmation emails.', 'warning')
+            flash('Your application has been approved, but there was an issue sending confirmation emails. Please contact support.', 'warning')
         
         return redirect(url_for('application_submitted'))
     

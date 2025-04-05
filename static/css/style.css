@@ -445,27 +445,27 @@ footer h5 {
   .jumbotron {
     padding: 2rem 1rem;
   }
-  
+
   .card-body {
     padding: 1.25rem;
   }
-  
+
   .btn {
     padding: 0.6rem 1.2rem;
   }
-  
+
   .review-row {
     flex-direction: column;
   }
-  
+
   .review-label, .review-value {
     width: 100%;
   }
-  
+
   .review-label {
     margin-bottom: 0.25rem;
   }
-  
+
   .review-value {
     margin-bottom: 1rem;
   }
@@ -537,4 +537,29 @@ footer h5 {
 
 .rounded-lg {
   border-radius: 8px !important;
+}
+
+.loan-status-banner {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.loan-status-banner.approved {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.loan-status-banner.pending {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.loan-status-banner.rejected {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
 }

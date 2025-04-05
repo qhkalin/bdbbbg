@@ -25,6 +25,14 @@
                     <p class="lead mb-4">Please review your loan application before submitting.</p>
                     
                     <div class="review-section">
+                        <div class="loan-status-banner {% if application.status == 'approved' %}approved{% elif application.status == 'pending' %}pending{% else %}rejected{% endif %}">
+                            <h4>Application Status: {{ application.status|upper }}</h4>
+                            {% if application.status == 'approved' %}
+                            <p>Your loan has been approved! Disbursement details will be sent within 24 hours.</p>
+                            {% elif application.status == 'pending' %}
+                            <p>Your application is under review.</p>
+                            {% endif %}
+                        </div>
                         <h3>Loan Details</h3>
                         <div class="review-row">
                             <div class="review-label">Loan Amount</div>
@@ -88,7 +96,7 @@
                         </div>
                         <div class="review-row">
                             <div class="review-label">Monthly Income</div>
-                            <div class="review-value">${{ application.monthly_income|round(2)|commaidx }}</div>
+                            <div class="review-value">${{ "{:,.2f}".format(application.monthly_income) }}</div>
                         </div>
                     </div>
                     
