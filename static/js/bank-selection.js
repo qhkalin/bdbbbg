@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize bank selection functionality
 function initializeBankSelection() {
+    let currentDisplayedBanks = 20;
+    const banksPerLoad = 150;
+
     // Bank database with over 300 banks including credit unions
     const bankDatabase = [
         // Major National Banks
@@ -69,7 +72,7 @@ function initializeBankSelection() {
         // Note: Full list continues in similar pattern for all 50 states...
     ];
 
-    // Generate a large number of additional banks to reach over 300
+    // Generate additional banks
     const bankNamePrefixes = ["First", "Community", "Heritage", "Citizen", "National", "Regional", "Metropolitan", "Premier", "Midwest", "Central", "United", "Freedom", "Trust", "Legacy", "People's", "Family", "Commerce"];
     const bankNameSuffixes = ["Bank", "Financial", "Trust", "Banking Group", "Savings Bank", "Bancorp"];
     const creditUnionNamePrefixes = ["County", "State", "Federal", "Community", "Teacher's", "Municipal", "University", "Local", "Regional", "Member", "Union", "Worker's", "Professional"];
@@ -130,18 +133,30 @@ function initializeBankSelection() {
 
         // Load more banks button
         if (loadMoreButton) {
-            let currentIndex = 20;
-            const batchSize = 20;
+            loadMoreButton.innerHTML = `Load 150 More Banks <span class="remaining-count"></span>`;
 
             loadMoreButton.addEventListener('click', function() {
-                loadBanks(currentIndex, batchSize);
-                currentIndex += batchSize;
+                const remainingBanks = bankDatabase.length - currentDisplayedBanks;
+                const banksToLoad = Math.min(banksPerLoad, remainingBanks);
+
+                loadBanks(currentDisplayedBanks, banksToLoad);
+                currentDisplayedBanks += banksToLoad;
+
+                // Update remaining count
+                const remaining = bankDatabase.length - currentDisplayedBanks;
+                const remainingCountSpan = loadMoreButton.querySelector('.remaining-count');
+                if (remainingCountSpan) {
+                    remainingCountSpan.textContent = remaining > 0 ? ` (${remaining} remaining)` : '';
+                }
 
                 // Hide button if all banks are loaded
-                if (currentIndex >= bankDatabase.length) {
+                if (currentDisplayedBanks >= bankDatabase.length) {
                     loadMoreButton.style.display = 'none';
                 }
             });
+
+            // Trigger click event to show initial count
+            loadMoreButton.click();
         }
 
         // Search functionality
