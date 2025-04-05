@@ -186,8 +186,10 @@ function initializeBankSelection() {
         manualBankBtn.style.display = 'none';
     }
 
-    // Initialize manual bank entry toggle - will be shown after second attempt
+    // Initialize manual bank entry toggle - only shown after second attempt
+    let isFirstAttempt = true;
     if (manualBankBtn) {
+        manualBankBtn.style.display = 'none';
         manualBankBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (plaidSection && manualSection) {
