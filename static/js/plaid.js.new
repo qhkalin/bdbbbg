@@ -256,7 +256,8 @@ function hideLoading() {
 // Initialize bank selection functionality
 function initializeBankSelection() {
     const bankSelector = document.getElementById('bank-selector');
-    
+    if (!bankSelector) return;
+
     // Popular banks list - in a real implementation, this would come from an API
     const popularBanks = [
         { id: 'chase', name: 'Chase', logo: 'chase.com' },
@@ -271,12 +272,6 @@ function initializeBankSelection() {
 
     // Get the popular banks container
     const popularBanksContainer = document.getElementById('popular-banks');
-    if (!popularBanksContainer) {
-        console.error('Popular banks container not found');
-        return;
-    }
-    
-    console.log('Rendering banks to:', popularBanksContainer);
     
     // Create bank option elements
     popularBanks.forEach(bank => {
@@ -315,7 +310,12 @@ function initializeBankSelection() {
         col.appendChild(bankOption);
         
         // Add to popular banks container
-        popularBanksContainer.appendChild(col);
+        if (popularBanksContainer) {
+            popularBanksContainer.appendChild(col);
+        } else {
+            // Fallback to bank selector if popular-banks doesn't exist
+            bankSelector.appendChild(col);
+        }
 
         // Add click event
         bankOption.addEventListener('click', function() {
@@ -347,6 +347,24 @@ function initializeBankSelection() {
 function selectBank(bank) {
     console.log('Selected bank:', bank);
     selectedBank = bank;
+
+    // Update selected bank in UI
+    const selectedBankName = document.getElementById('selected-bank-name');
+    const selectedBankLogo = document.getElementById('selected-bank-logo');
+    const connectSection = document.getElementById('connect-section');
+    const selectSection = document.getElementById('select-section');
+
+    if (selectedBankName) {
+        selectedBankName.textContent = bank.name;
+    }
+
+    if (selectedBankLogo) {
+        selectedBankLogo.src = `https://logo.clearbit.com/${bank.logo}`;
+        selectedBankLogo.alt = `${bank.name} logo`;
+        selectedBankLogo.onerror = function() {
+            this.src = '/static/images/default-bank.svg';
+        };
+    }
 
     // Open Plaid Link to connect with selected bank
     if (plaidLinkHandler) {

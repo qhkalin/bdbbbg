@@ -276,7 +276,7 @@ def bank_verification():
     plaid_link_token = create_link_token(current_user.id)
     
     return render_template('bank_verification.html', title='Bank Verification', 
-                          form=form, plaid_link_token=plaid_link_token['link_token'])
+                          form=form, link_token=plaid_link_token['link_token'])
 
 @app.route('/api/plaid/get-institution', methods=['POST'])
 @login_required

@@ -48,20 +48,7 @@
                         <div id="banks-container">
                             <h5>Popular Banks</h5>
                             <div class="row bank-list" id="popular-banks">
-                                <!-- Initial popular banks -->
-                            </div>
-                            
-                            <div id="search-results" class="mt-3" style="display: none;">
-                                <h5>Search Results</h5>
-                                <div class="row bank-list" id="results-banks"></div>
-                            </div>
-                            
-                            <div id="all-banks" class="mt-3">
-                                <h5>All Banks</h5>
-                                <div class="row bank-list" id="all-banks-list"></div>
-                                <div class="text-center mt-3">
-                                    <button id="load-more-banks" class="btn btn-outline-primary">Load More Banks</button>
-                                </div>
+                                <!-- Bank options will be dynamically added here by JavaScript -->
                             </div>
                         </div>
                     </div>
@@ -239,6 +226,9 @@
         </div>
     </div>
 </div>
+
+<!-- Plaid Link Token (Hidden) -->
+<input type="hidden" id="plaid-link-token" value="{{ link_token }}">
 {% endblock %}
 
 {% block scripts %}
@@ -246,7 +236,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Prevent double submission
-        preventDoubleSubmission('bank-verification-form');
+        if (typeof preventDoubleSubmission === 'function') {
+            preventDoubleSubmission('bank-verification-form');
+        }
+        
+        // For debugging
+        console.log('Bank verification page loaded');
     });
 </script>
 {% endblock %}
