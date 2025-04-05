@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 @app.route('/')
 def index():
     """Home page route"""
-    return render_template('index.html', title='AmeriFund Loan - Secure Financing Solutions')
+    return render_template('index.html', title='AmeriFund Loan - Secure Financing Solutions', now=datetime.now())
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
