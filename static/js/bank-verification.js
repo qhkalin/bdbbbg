@@ -55,8 +55,20 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderPopularBanks() {
         if (!popularBanksContainer) return;
         
-        // Get all banks from the main database
-        const bankDatabase = window.bankDatabase || [];
+        // Bank database defined directly here
+        const bankDatabase = [
+            // Major National Banks
+            {name: "Chase", domain: "chase.com", type: "bank", popular: true},
+            {name: "Bank of America", domain: "bankofamerica.com", type: "bank", popular: true},
+            {name: "Wells Fargo", domain: "wellsfargo.com", type: "bank", popular: true},
+            {name: "Citibank", domain: "citibank.com", type: "bank", popular: true},
+            {name: "Capital One", domain: "capitalone.com", type: "bank", popular: true},
+            {name: "TD Bank", domain: "tdbank.com", type: "bank", popular: true},
+            {name: "US Bank", domain: "usbank.com", type: "bank", popular: true},
+            {name: "PNC Bank", domain: "pnc.com", type: "bank", popular: true},
+            // Add more banks as needed
+        ];
+        
         const popularBanks = bankDatabase.filter(bank => bank.popular);
         const otherBanks = bankDatabase.filter(bank => !bank.popular);
         
