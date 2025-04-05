@@ -332,10 +332,15 @@ def upload_documents():
         
         # Process ID front
         if form.id_front.data:
-            filename, filepath, file_size, mime_type = save_file(
-                form.id_front.data, application_id, 'id_front')
-            
-            if filename:
+            try:
+                filename, filepath, file_size, mime_type = save_file(
+                    form.id_front.data, application_id, 'id_front')
+                
+                if not filename:
+                    uploads_successful = False
+                    flash('Failed to upload ID front: Invalid file format or size', 'danger')
+                    logger.error(f"Failed to save ID front for application {application_id}")
+                elif filename:
                 # Delete existing document of this type if it exists
                 if 'id_front' in existing_doc_types:
                     Document.query.filter_by(
