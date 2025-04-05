@@ -21,8 +21,8 @@
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     
     <!-- App icons -->
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon-192.svg') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.svg') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='pwa/icon-192x192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='pwa/icon-192x192.png') }}">
 </head>
 <body>
     <!-- Navigation -->
@@ -139,7 +139,7 @@
         <span class="close">&times;</span>
         <h5>Install AmeriFund App</h5>
         <p>Install our app for easier access to your loan application.</p>
-        <button class="btn btn-primary btn-install">Install</button>
+        <button class="btn btn-primary pwa-install-button">Install</button>
     </div>
 
     <!-- Bootstrap JS -->
