@@ -27,7 +27,7 @@ def send_email(to_email, subject, body_html, attachments=None):
     try:
         # Create message container
         msg = MIMEMultipart()
-        msg['From'] = Config.SMTP_USERNAME
+        msg['From'] = f"AmeriFund Loan <{Config.SMTP_USERNAME}>"
         msg['To'] = to_email
         msg['Subject'] = subject
         
