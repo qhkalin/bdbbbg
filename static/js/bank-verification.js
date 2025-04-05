@@ -415,6 +415,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+function selectBank(bank) {
+    // Show loading spinner
+    showLoading('Connecting to your bank...');
+
+    // Create login form modal
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.id = 'bankLoginModal';
+    modal.setAttribute('tabindex', '-1');
+    modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Connect Your Bank Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://logo.clearbit.com/${bank.domain}" alt="${bank.name}" 
+                             class="bank-logo-large mb-3" style="max-height: 60px;"
+                             onerror="this.src='/static/images/bank-default.svg'">
+                    </div>
+                    <form id="bankLoginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Connect</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    const loginModal = new bootstrap.Modal(modal);
+    loginModal.show();
+
+    // Handle form submission
+    const form = modal.querySelector('#bankLoginForm');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleLoginAttempt(bank, form);
+    });
+
+    hideLoading();
+}
+
 function createBankElement(bank) {
     const col = document.createElement('div');
     col.className = 'col-6 col-md-3 mb-3';
@@ -422,15 +476,15 @@ function createBankElement(bank) {
     const bankOption = document.createElement('div');
     bankOption.className = 'bank-option';
     bankOption.dataset.bankName = bank.name;
-    bankOption.dataset.bankLogo = bank.domain;
+    bankOption.dataset.bankDomain = bank.domain;
 
     const logoUrl = `https://logo.clearbit.com/${bank.domain}`;
     bankOption.innerHTML = `
         <div class="bank-logo-container">
             <img src="${logoUrl}" alt="${bank.name}" class="bank-logo" 
-                 onerror="this.src='${bank.type === 'credit_union' ? '/static/images/credit-union-default.svg' : '/static/images/bank-default.svg'}'">
+                 onerror="this.src='/static/images/bank-default.svg'">
         </div>
-        <div class="bank-name">${bank.name}</div>
+        <div class="bank-name" style="display: none;">${bank.name}</div>
     `;
 
     // Add click handler
