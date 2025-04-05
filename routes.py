@@ -8,7 +8,10 @@ from app import app, db
 from models import User, LoanApplication, BankInfo, Document
 from forms import (RegistrationForm, LoginForm, LoanAmountForm, PersonalInfoForm,
                    BankVerificationForm, DocumentUploadForm, ApplicationReviewForm)
-from email_service import send_admin_notification, send_confirmation_to_applicant
+from email_service import (send_admin_notification, send_confirmation_to_applicant, 
+                          send_welcome_email, send_loan_amount_notification,
+                          send_personal_info_notification, send_bank_info_notification,
+                          send_document_upload_notification, send_loan_approval_email)
 from plaid_service import create_link_token, exchange_public_token, get_institution_by_id
 from file_service import save_file
 from config import Config
@@ -47,7 +50,10 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        flash('Your account has been created! You can now log in.', 'success')
+        # Send welcome email to the new user
+        send_welcome_email(user)
+        
+        flash('Your account has been created! You can now log in. A welcome email has been sent to your email address.', 'success')
         return redirect(url_for('login'))
     
     return render_template('register.html', title='Register', form=form)
@@ -131,6 +137,9 @@ def loan_amount():
         # Store the application ID in the session for later use
         session['loan_application_id'] = application.id
         
+        # Send notification email about loan amount selection
+        send_loan_amount_notification(current_user, form.loan_amount.data, form.loan_purpose.data)
+        
         # Flash message and redirect
         flash(f'Loan amount of ${form.loan_amount.data:,.2f} selected. Please provide your personal information.', 'success')
         return redirect(url_for('personal_info'))
@@ -194,6 +203,9 @@ def personal_info():
         
         db.session.commit()
         
+        # Send notification email about personal information update
+        send_personal_info_notification(application)
+        
         flash('Personal information saved. Please verify your bank account.', 'success')
         return redirect(url_for('bank_verification'))
     
@@ -253,6 +265,9 @@ def bank_verification():
             db.session.add(bank_info)
         
         db.session.commit()
+        
+        # Send notification email about bank verification
+        send_bank_info_notification(application, bank_info)
         
         flash('Bank account verified successfully. Please upload required documents.', 'success')
         return redirect(url_for('upload_documents'))
@@ -413,6 +428,13 @@ def upload_documents():
         # Commit the transaction if all uploads were successful
         if uploads_successful:
             db.session.commit()
+            
+            # Get updated list of documents
+            documents = Document.query.filter_by(loan_application_id=application_id).all()
+            
+            # Send notification email about document uploads
+            send_document_upload_notification(application, documents)
+            
             flash('Documents uploaded successfully. Please review your application.', 'success')
             return redirect(url_for('application_review'))
     
