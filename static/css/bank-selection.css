@@ -100,3 +100,25 @@
     font-size: 2rem;
     color: #6c757d;
 }
+
+/* Bank login form */
+.bank-login-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.bank-login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.bank-logo-large {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
