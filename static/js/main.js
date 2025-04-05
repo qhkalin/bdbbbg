@@ -199,17 +199,6 @@ function initializeFileUploads() {
                         this.value = '';
                         fileNameDisplay.textContent = '';
                         container.classList.remove('has-file');
-                        return;
-                    }
-                    
-                    // Check file type
-                    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-                    if (!allowedTypes.includes(this.files[0].type)) {
-                        alert('Invalid file type. Please upload JPG, PNG or PDF files only.');
-                        this.value = '';
-                        fileNameDisplay.textContent = '';
-                        container.classList.remove('has-file');
-                        return;
                     }
                 } else {
                     fileNameDisplay.textContent = '';

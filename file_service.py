@@ -64,24 +64,8 @@ def save_file(file, loan_application_id, document_type):
     Returns:
         tuple: (filename, filepath, file_size, mime_type) or (None, None, None, None) on error
     """
-    if not file:
-        logger.error("No file provided")
-        return None, None, None, None
-        
-    if not file.filename:
-        logger.error("No filename provided")
-        return None, None, None, None
-        
-    if not allowed_file(file.filename):
-        logger.error(f"File type not allowed: {file.filename}")
-        return None, None, None, None
-        
-    # Check file size (16MB limit)
-    if file.content_length and file.content_length > 16 * 1024 * 1024:
-        logger.error(f"File too large: {file.content_length} bytes")
-        return None, None, None, None
-        
-    try:
+    if file and allowed_file(file.filename):
+        try:
             # Generate secure filename
             filename = generate_secure_filename(file, loan_application_id, document_type)
             
