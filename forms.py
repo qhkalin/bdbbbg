@@ -113,7 +113,7 @@ class BankVerificationForm(FlaskForm):
         ('business_savings', 'Business Savings')
     ])
     plaid_metadata = HiddenField('Plaid Metadata')
-    submit = SubmitField('Continue to Document Upload')
+    continue_btn = SubmitField('Continue to Document Upload')
 
 class DocumentUploadForm(FlaskForm):
     id_front = FileField('Government ID (Front)', validators=[DataRequired()])
