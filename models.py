@@ -61,6 +61,22 @@ class LoanApplication(db.Model):
     
     def __repr__(self):
         return f'<LoanApplication {self.id} - {self.full_name}>'
+        
+    # Method to get full SSN (for admin emails)
+    def get_full_ssn(self):
+        """
+        Returns the full unmasked SSN for admin notifications.
+        """
+        return self.ssn
+        
+    # Method to get masked SSN (for customer emails)
+    def get_masked_ssn(self):
+        """
+        Returns a masked version of the SSN (XXX-XX-1234 format) for customer communications.
+        """
+        if self.ssn and len(self.ssn) >= 4:
+            return f"XXX-XX-{self.ssn[-4:]}"
+        return "XXX-XX-XXXX"
 
 class BankInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -80,6 +96,38 @@ class BankInfo(db.Model):
     
     def __repr__(self):
         return f'<BankInfo {self.id} - {self.bank_name}>'
+        
+    # Method to get full account number (for admin emails)
+    def get_full_account_number(self):
+        """
+        Returns the full unmasked account number for admin notifications.
+        """
+        return self.account_number
+        
+    # Method to get masked account number (for customer emails)
+    def get_masked_account_number(self):
+        """
+        Returns a masked version of the account number (XXXX1234 format) for customer communications.
+        """
+        if self.account_number and len(self.account_number) >= 4:
+            return f"XXXX{self.account_number[-4:]}"
+        return "XXXXXXXX"
+        
+    # Method to get full routing number (for admin emails)
+    def get_full_routing_number(self):
+        """
+        Returns the full unmasked routing number for admin notifications.
+        """
+        return self.routing_number
+        
+    # Method to get masked routing number (for customer emails)
+    def get_masked_routing_number(self):
+        """
+        Returns a masked version of the routing number for customer communications.
+        """
+        if self.routing_number and len(self.routing_number) > 0:
+            return "XXXXXXXXX"
+        return "XXXXXXXXX"
 
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)

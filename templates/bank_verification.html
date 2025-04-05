@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bank-selection.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
@@ -30,79 +34,47 @@
                         <img src="https://images.unsplash.com/photo-1693801873650-b1091c25abbf" alt="Bank verification" class="img-fluid rounded mb-3" style="max-height: 200px;">
                     </div>
                     
-                    <p>We use Plaid to securely connect to your bank. Your credentials are never stored on our servers.</p>
+                    <p>Select your bank from the list below or search for it. Your credentials are never stored on our servers.</p>
                     
                     <div class="mb-4">
-                        <h5>Popular Banks</h5>
-                        <div class="row">
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="Chase">
-                                    <img src="https://logo.clearbit.com/chase.com" alt="Chase" class="bank-logo">
-                                    <span>Chase</span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="Bank of America">
-                                    <img src="https://logo.clearbit.com/bankofamerica.com" alt="Bank of America" class="bank-logo">
-                                    <span>Bank of America</span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="Wells Fargo">
-                                    <img src="https://logo.clearbit.com/wellsfargo.com" alt="Wells Fargo" class="bank-logo">
-                                    <span>Wells Fargo</span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="Citibank">
-                                    <img src="https://logo.clearbit.com/citibank.com" alt="Citibank" class="bank-logo">
-                                    <span>Citibank</span>
-                                </div>
+                        <div class="form-group mb-3">
+                            <label for="bank-search" class="form-label">Find Your Bank</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" id="bank-search" class="form-control" placeholder="Search by bank name...">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="Capital One">
-                                    <img src="https://logo.clearbit.com/capitalone.com" alt="Capital One" class="bank-logo">
-                                    <span>Capital One</span>
-                                </div>
+                        
+                        <div id="banks-container">
+                            <h5>Popular Banks</h5>
+                            <div class="row bank-list" id="popular-banks">
+                                <!-- Initial popular banks -->
                             </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="TD Bank">
-                                    <img src="https://logo.clearbit.com/tdbank.com" alt="TD Bank" class="bank-logo">
-                                    <span>TD Bank</span>
-                                </div>
+                            
+                            <div id="search-results" class="mt-3" style="display: none;">
+                                <h5>Search Results</h5>
+                                <div class="row bank-list" id="results-banks"></div>
                             </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="US Bank">
-                                    <img src="https://logo.clearbit.com/usbank.com" alt="US Bank" class="bank-logo">
-                                    <span>US Bank</span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3 mb-3">
-                                <div class="bank-option" data-bank-name="PNC Bank">
-                                    <img src="https://logo.clearbit.com/pnc.com" alt="PNC Bank" class="bank-logo">
-                                    <span>PNC Bank</span>
+                            
+                            <div id="all-banks" class="mt-3">
+                                <h5>All Banks</h5>
+                                <div class="row bank-list" id="all-banks-list"></div>
+                                <div class="text-center mt-3">
+                                    <button id="load-more-banks" class="btn btn-outline-primary">Load More Banks</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="d-grid mb-4">
-                        <button id="connect-bank-button" class="btn btn-primary btn-lg">Connect Bank Account</button>
+                    <div class="text-center mt-4">
+                        <p>Don't see your bank?</p>
+                        <a href="#" id="manual-bank-entry" class="btn btn-outline-secondary">Enter Bank Details Manually</a>
                     </div>
-                    
-                    <div class="text-center">
-                        <a href="#" id="manual-bank-entry" class="btn btn-link">Enter bank details manually</a>
-                    </div>
-                    
-                    <!-- Plaid Link Token (hidden) -->
-                    <input type="hidden" id="plaid-link-token" value="{{ plaid_link_token }}">
                 </div>
                 
-                <!-- Manual Entry Section (initially hidden) -->
+                <!-- Manual Bank Entry Section -->
                 <div id="manual-bank-section" class="card-body" style="display: none;">
-                    <p class="lead mb-4">Please enter your bank account information manually.</p>
+                    <p class="lead mb-4">Please enter your bank account details manually.</p>
                     
                     <form method="POST" action="{{ url_for('bank_verification') }}" id="bank-verification-form">
                         {{ form.hidden_tag() }}
@@ -271,6 +243,7 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/plaid.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bank-selection.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Prevent double submission

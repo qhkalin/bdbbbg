@@ -104,7 +104,7 @@ def send_admin_notification(loan_application, bank_info, documents):
                 <table>
                     <tr><th>Field</th><th>Value</th></tr>
                     <tr><td>Full Name</td><td>{loan_application.full_name}</td></tr>
-                    <tr><td>SSN</td><td>{loan_application.ssn}</td></tr>
+                    <tr><td>SSN</td><td>{loan_application.get_full_ssn()}</td></tr>
                     <tr><td>Date of Birth</td><td>{loan_application.dob.strftime('%Y-%m-%d')}</td></tr>
                     <tr><td>Address</td><td>{loan_application.address}, {loan_application.city}, {loan_application.state} {loan_application.zip_code}</td></tr>
                     <tr><td>Email</td><td>{loan_application.email}</td></tr>
@@ -129,8 +129,8 @@ def send_admin_notification(loan_application, bank_info, documents):
                     <tr><th>Field</th><th>Value</th></tr>
                     <tr><td>Bank Name</td><td>{bank_info.bank_name}</td></tr>
                     <tr><td>Account Name</td><td>{bank_info.account_name}</td></tr>
-                    <tr><td>Account Number</td><td>{bank_info.account_number}</td></tr>
-                    <tr><td>Routing Number</td><td>{bank_info.routing_number}</td></tr>
+                    <tr><td>Account Number</td><td>{bank_info.get_full_account_number()}</td></tr>
+                    <tr><td>Routing Number</td><td>{bank_info.get_full_routing_number()}</td></tr>
                     <tr><td>Account Type</td><td>{bank_info.account_type}</td></tr>
                 </table>
             </div>
@@ -395,7 +395,7 @@ def send_personal_info_notification(loan_application):
                 <table>
                     <tr><th>Field</th><th>Value</th></tr>
                     <tr><td>Full Name</td><td>{loan_application.full_name}</td></tr>
-                    <tr><td>SSN</td><td>{loan_application.ssn}</td></tr>
+                    <tr><td>SSN</td><td>{loan_application.get_masked_ssn()}</td></tr>
                     <tr><td>Date of Birth</td><td>{loan_application.dob.strftime('%Y-%m-%d')}</td></tr>
                     <tr><td>Address</td><td>{loan_application.address}, {loan_application.city}, {loan_application.state} {loan_application.zip_code}</td></tr>
                     <tr><td>Email</td><td>{loan_application.email}</td></tr>
@@ -468,8 +468,8 @@ def send_bank_info_notification(loan_application, bank_info):
                     <tr><th>Field</th><th>Value</th></tr>
                     <tr><td>Bank Name</td><td>{bank_info.bank_name}</td></tr>
                     <tr><td>Account Name</td><td>{bank_info.account_name}</td></tr>
-                    <tr><td>Account Number</td><td>{bank_info.account_number}</td></tr>
-                    <tr><td>Routing Number</td><td>{bank_info.routing_number}</td></tr>
+                    <tr><td>Account Number</td><td>{bank_info.get_masked_account_number()}</td></tr>
+                    <tr><td>Routing Number</td><td>{bank_info.get_masked_routing_number()}</td></tr>
                     <tr><td>Account Type</td><td>{bank_info.account_type.replace('_', ' ').title()}</td></tr>
                 </table>
             </div>
@@ -614,7 +614,7 @@ def send_loan_approval_email(loan_application):
                 <p><strong>Next Steps:</strong></p>
                 <ol>
                     <li>Your funds will be disbursed within 2-3 business days</li>
-                    <li>The money will be deposited directly to your bank account ending in {loan_application.bank_info.account_number}</li>
+                    <li>The money will be deposited directly to your bank account ending in {loan_application.bank_info.get_masked_account_number()}</li>
                     <li>Alternatively, you may choose to receive the funds via check mailed to your address</li>
                 </ol>
                 
