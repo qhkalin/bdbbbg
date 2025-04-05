@@ -7,18 +7,28 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedBank = null;
     let isFirstAttempt = true;
 
-    function renderBanks() {
-        const bankDatabase = [
-            {name: "CHASE", domain: "chase.com"},
-            {name: "BANK OF AMERICA", domain: "bankofamerica.com"},
-            {name: "WELLS FARGO", domain: "wellsfargo.com"},
-            {name: "CITIBANK", domain: "citibank.com"},
-            {name: "CAPITAL ONE", domain: "capitalone.com"},
-            {name: "TD BANK", domain: "td.com"},
-            {name: "US BANK", domain: "usbank.com"},
-            {name: "PNC BANK", domain: "pnc.com"}
-        ];
+    const bankDatabase = [
+        // Major National Banks
+        {name: "Chase", domain: "chase.com", type: "bank", popular: true},
+        {name: "Bank of America", domain: "bankofamerica.com", type: "bank", popular: true},
+        {name: "Wells Fargo", domain: "wellsfargo.com", type: "bank", popular: true},
+        {name: "Citibank", domain: "citibank.com", type: "bank", popular: true},
+        {name: "Capital One", domain: "capitalone.com", type: "bank", popular: true},
+        {name: "TD Bank", domain: "tdbank.com", type: "bank", popular: true},
+        {name: "US Bank", domain: "usbank.com", type: "bank", popular: true},
+        {name: "PNC Bank", domain: "pnc.com", type: "bank", popular: true},
+        {name: "Truist Bank", domain: "truist.com", type: "bank", popular: true},
+        {name: "Goldman Sachs", domain: "goldmansachs.com", type: "bank", popular: true},
+        {name: "Fifth Third Bank", domain: "53.com", type: "bank", popular: true},
+        {name: "Citizens Bank", domain: "citizensbank.com", type: "bank", popular: true},
+        // Additional Major Banks (Limited due to incomplete snippet)
+        {name: "Ally Bank", domain: "ally.com", type: "bank", popular: false},
+        {name: "American Express Bank", domain: "americanexpress.com", type: "bank", popular: false}
+        // Add more banks here...
+    ];
 
+
+    function renderBanks() {
         bankDatabase.forEach(bank => {
             const col = document.createElement('div');
             col.className = 'col-6 col-md-3 mb-3';
