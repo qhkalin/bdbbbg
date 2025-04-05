@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="AmeriFund Loan - Secure financing solutions for your business needs">
-    <meta name="theme-color" content="#007bff">
+    <meta name="theme-color" content="#003366">
     
     <title>{{ title|default('AmeriFund Loan') }}</title>
     
@@ -16,22 +16,21 @@
     
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/pwa.css') }}">
     
     <!-- PWA manifest -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     
     <!-- App icons -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='pwa/icon-192x192.png') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='pwa/icon-192x192.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon-192.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.svg') }}">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('index') }}">
-                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="AmeriFund Loan" class="logo-img">
-                AmeriFund Loan
+                <img src="{{ url_for('static', filename='images/icon-192.svg') }}" width="30" height="30" class="d-inline-block align-top me-2" alt="AmeriFund Logo">
+                AmeriFund
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -39,30 +38,31 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
                     </li>
                     {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">My Applications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_for('loan_amount') %}active{% endif %}" href="{{ url_for('loan_amount') }}">Apply</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_for('login') %}active{% endif %}" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_for('register') %}active{% endif %}" href="{{ url_for('register') }}">Register</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Flash messages -->
-    <div class="container mt-5 pt-3">
+    <!-- Main Content -->
+    <main class="container mt-5 pt-3">
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -73,26 +73,17 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-    </div>
-
-    <!-- Main content -->
-    <main class="container my-4">
+        
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-5">
-        <div class="container py-5">
+    <footer class="mt-5">
+        <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <h5>AmeriFund Loan</h5>
-                    <p>Secure financing solutions for your business needs.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                    </div>
+                    <p>Secure financing solutions for your business needs. Apply for loans ranging from $5,000 to $800,000.</p>
                 </div>
                 <div class="col-md-2 mb-4">
                     <h5>Company</h5>
@@ -117,35 +108,38 @@
                     <ul class="footer-links">
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Disclosures</a></li>
+                        <li><a href="#">Licensing</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 mb-4">
-                    <h5>Support</h5>
+                    <h5>Connect</h5>
                     <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#"><i class="fab fa-facebook-square me-2"></i>Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-twitter-square me-2"></i>Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                        <li><a href="#"><i class="fab fa-instagram-square me-2"></i>Instagram</a></li>
                     </ul>
                 </div>
             </div>
-            <hr>
-            <div class="row copyright">
+            <hr class="mt-4 mb-4" style="border-color: rgba(255, 255, 255, 0.1);">
+            <div class="row">
                 <div class="col-md-6 text-center text-md-start">
-                    <p>&copy; 2025 AmeriFund Loan. All rights reserved.</p>
+                    <p>&copy; 2023 AmeriFund Loan. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
-                    <p><small>NMLS ID: 12345678</small></p>
+                    <p>NMLS #12345 | Equal Housing Lender</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- PWA Install Prompt -->
-    <div class="pwa-install-prompt">
+    <div id="pwa-install-prompt" class="pwa-install-prompt">
+        <span class="close">&times;</span>
         <h5>Install AmeriFund App</h5>
         <p>Install our app for easier access to your loan application.</p>
-        <button class="btn btn-primary pwa-install-button">Install</button>
+        <button class="btn btn-primary btn-install">Install</button>
     </div>
 
     <!-- Bootstrap JS -->

