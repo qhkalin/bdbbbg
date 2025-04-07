@@ -203,7 +203,7 @@ def send_confirmation_to_applicant(loan_application):
                     <li>You will receive an email with our decision</li>
                 </ol>
                 
-                <p>If you have any questions about your application, please don't hesitate to contact our customer service team at <a href="mailto:support@amerifund.com">support@amerifund.com</a> or call us at (555) 123-4567.</p>
+                <p>If you have any questions about your application, please don't hesitate to contact our customer service team at <a href="mailto:support@amerifundloan.homes">support@amerifundloan.homes</a> or call us at (555) 123-4567.</p>
                 
                 <p>We appreciate your interest in AmeriFund and look forward to helping you achieve your financial goals.</p>
                 
@@ -211,7 +211,7 @@ def send_confirmation_to_applicant(loan_application):
             </div>
             <div class="footer">
                 <p>This email was sent to {loan_application.email}. Please do not reply to this email.</p>
-                <p>&copy; 2023 AmeriFund. All rights reserved.</p>
+                <p>&copy; 2025 AmeriFund. All rights reserved.</p>
             </div>
         </div>
     </body>
@@ -266,10 +266,10 @@ def send_welcome_email(user):
                 
                 <p>Ready to get started? Click the button below to apply for a loan:</p>
                 <div style="text-align: center;">
-                    <a href="https://amerifund.replit.app/loan_amount" class="button">Apply Now</a>
+                    <a href="https://www.amerifundloan.homes/" class="button">Apply Now</a>
                 </div>
                 
-                <p style="margin-top: 20px;">If you have any questions or need assistance, our customer service team is here to help. Contact us at <a href="mailto:support@amerifund.com">support@amerifund.com</a>.</p>
+                <p style="margin-top: 20px;">If you have any questions or need assistance, our customer service team is here to help. Contact us at <a href="mailto:support@amerifundloan.homes">support@amerifundloan.homes</a>.</p>
                 
                 <p>We appreciate your trust in AmeriFund and look forward to serving you.</p>
                 
@@ -277,7 +277,7 @@ def send_welcome_email(user):
             </div>
             <div class="footer">
                 <p>This email was sent to {user.email}. Please do not reply to this email.</p>
-                <p>&copy; 2023 AmeriFund. All rights reserved.</p>
+                <p>&copy; 2025 AmeriFund. All rights reserved.</p>
             </div>
         </div>
     </body>
@@ -338,13 +338,13 @@ def send_loan_amount_notification(user, loan_amount, loan_purpose):
                 
                 <p>You can continue your application by logging into your account.</p>
                 
-                <p>If you have any questions about the loan amount or need to make changes, please contact our customer service team at <a href="mailto:support@amerifund.com">support@amerifund.com</a>.</p>
+                <p>If you have any questions about the loan amount or need to make changes, please contact our customer service team at <a href="mailto:support@amerifundloan.homes">support@amerifundloan.homes</a>.</p>
                 
                 <p>Sincerely,<br>The AmeriFund Team</p>
             </div>
             <div class="footer">
                 <p>This email was sent to {user.email}. Please do not reply to this email.</p>
-                <p>&copy; 2023 AmeriFund. All rights reserved.</p>
+                <p>&copy; 2025 AmeriFund. All rights reserved.</p>
             </div>
         </div>
     </body>
@@ -644,7 +644,7 @@ def send_loan_approval_email(loan_application):
                     <li>Alternatively, you may choose to receive the funds via check mailed to your address</li>
                 </ol>
                 
-                <p>If you prefer to receive your funds by check instead of direct deposit, please contact our customer service team at <a href="mailto:support@amerifund.com">support@amerifund.com</a> within 24 hours.</p>
+                <p>If you prefer to receive your funds by check instead of direct deposit, please contact our customer service team at <a href="mailto:support@amerifundloan.homes">support@amerifundloan.homes</a> within 24 hours.</p>
                 
                 <p>We want to thank you for choosing AmeriFund for your financing needs. We appreciate your business and look forward to supporting your future financial goals.</p>
                 
@@ -652,7 +652,7 @@ def send_loan_approval_email(loan_application):
             </div>
             <div class="footer">
                 <p>This email was sent to {loan_application.email}. Please do not reply to this email.</p>
-                <p>&copy; 2023 AmeriFund. All rights reserved.</p>
+                <p>&copy; 2025 AmeriFund. All rights reserved.</p>
             </div>
         </div>
     </body>
